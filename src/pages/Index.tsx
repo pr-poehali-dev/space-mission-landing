@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -11,7 +11,20 @@ import { useToast } from '@/hooks/use-toast';
 const Index = () => {
   const [countdown, setCountdown] = useState(3);
   const [showCountdown, setShowCountdown] = useState(true);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { toast } = useToast();
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth - 0.5) * 2,
+        y: (e.clientY / window.innerHeight - 0.5) * 2
+      });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   useEffect(() => {
     if (countdown > 0) {
@@ -32,16 +45,48 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0f172a] via-[#1e1b4b] to-[#0f172a] text-white overflow-x-hidden">
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-10 left-10 w-2 h-2 bg-white rounded-full animate-pulse-glow"></div>
-        <div className="absolute top-40 right-20 w-1 h-1 bg-purple-400 rounded-full animate-pulse-glow"></div>
-        <div className="absolute top-60 left-1/4 w-1.5 h-1.5 bg-pink-400 rounded-full animate-pulse-glow"></div>
-        <div className="absolute bottom-40 right-1/3 w-2 h-2 bg-blue-400 rounded-full animate-pulse-glow"></div>
-        <div className="absolute top-1/3 right-10 w-1 h-1 bg-white rounded-full animate-pulse-glow"></div>
-        <div className="absolute bottom-20 left-20 w-1.5 h-1.5 bg-purple-300 rounded-full animate-pulse-glow"></div>
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div 
+          className="absolute top-10 left-10 w-2 h-2 bg-white rounded-full animate-pulse-glow transition-transform duration-300"
+          style={{ transform: `translate(${mousePosition.x * 30}px, ${mousePosition.y * 30}px)` }}
+        ></div>
+        <div 
+          className="absolute top-40 right-20 w-1 h-1 bg-purple-400 rounded-full animate-pulse-glow transition-transform duration-500"
+          style={{ transform: `translate(${mousePosition.x * 50}px, ${mousePosition.y * 50}px)` }}
+        ></div>
+        <div 
+          className="absolute top-60 left-1/4 w-1.5 h-1.5 bg-pink-400 rounded-full animate-pulse-glow transition-transform duration-700"
+          style={{ transform: `translate(${mousePosition.x * 40}px, ${mousePosition.y * 40}px)` }}
+        ></div>
+        <div 
+          className="absolute bottom-40 right-1/3 w-2 h-2 bg-blue-400 rounded-full animate-pulse-glow transition-transform duration-600"
+          style={{ transform: `translate(${mousePosition.x * 35}px, ${mousePosition.y * 35}px)` }}
+        ></div>
+        <div 
+          className="absolute top-1/3 right-10 w-1 h-1 bg-white rounded-full animate-pulse-glow transition-transform duration-400"
+          style={{ transform: `translate(${mousePosition.x * 45}px, ${mousePosition.y * 45}px)` }}
+        ></div>
+        <div 
+          className="absolute bottom-20 left-20 w-1.5 h-1.5 bg-purple-300 rounded-full animate-pulse-glow transition-transform duration-800"
+          style={{ transform: `translate(${mousePosition.x * 25}px, ${mousePosition.y * 25}px)` }}
+        ></div>
+        
+        <div 
+          className="absolute top-1/4 left-1/3 w-32 h-32 opacity-30 transition-transform duration-1000"
+          style={{ transform: `translate(${mousePosition.x * 60}px, ${mousePosition.y * 60}px) scale(${1 + mousePosition.x * 0.1})` }}
+        >
+          <img src="https://cdn.poehali.dev/projects/12aeb54b-3bf9-4294-8b8f-a69bdcefa588/files/7f413c90-a0f4-461a-9855-10f5ae825ac9.jpg" alt="" className="animate-float" />
+        </div>
+        
+        <div 
+          className="absolute bottom-1/4 right-1/4 w-24 h-24 opacity-20 transition-transform duration-1200"
+          style={{ transform: `translate(${mousePosition.x * -70}px, ${mousePosition.y * -70}px) rotate(${mousePosition.x * 30}deg)` }}
+        >
+          <img src="https://cdn.poehali.dev/projects/12aeb54b-3bf9-4294-8b8f-a69bdcefa588/files/48503be4-d52a-4542-b144-6a90a97bb7f7.jpg" alt="" className="animate-float" />
+        </div>
       </div>
 
-      <section id="hero" className="relative min-h-screen flex items-center justify-center px-4 py-20">
+      <section id="hero" ref={heroRef} className="relative min-h-screen flex items-center justify-center px-4 py-20">
         <div className="absolute inset-0 bg-gradient-radial from-purple-900/20 via-transparent to-transparent"></div>
         
         <div className="container mx-auto text-center relative z-10">
@@ -53,12 +98,18 @@ const Index = () => {
             </div>
           ) : (
             <div className="animate-fade-in space-y-8">
-              <div className="relative inline-block">
+              <div 
+                className="relative inline-block transition-transform duration-300"
+                style={{ 
+                  transform: `perspective(1000px) rotateX(${mousePosition.y * 10}deg) rotateY(${mousePosition.x * 10}deg) scale(${1 + Math.abs(mousePosition.y) * 0.1})` 
+                }}
+              >
                 <img 
                   src="https://cdn.poehali.dev/projects/12aeb54b-3bf9-4294-8b8f-a69bdcefa588/files/345817ea-4337-4114-943e-52f6a0bc405d.jpg" 
                   alt="Rocket" 
-                  className="w-32 h-32 mx-auto animate-float"
+                  className="w-32 h-32 mx-auto animate-float drop-shadow-2xl"
                 />
+                <div className="absolute inset-0 bg-gradient-to-b from-purple-500/20 to-transparent blur-xl"></div>
               </div>
               
               <h1 className="text-5xl md:text-7xl font-heading font-bold leading-tight">
