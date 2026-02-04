@@ -64,8 +64,9 @@ export default {
 				}
 			},
 			fontFamily: {
-				sans: ['Open Sans', 'sans-serif'],
-				heading: ['Rubik', 'sans-serif']
+				sans: ['Rajdhani', 'sans-serif'],
+				heading: ['Orbitron', 'sans-serif'],
+				mono: ['Orbitron', 'monospace']
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
